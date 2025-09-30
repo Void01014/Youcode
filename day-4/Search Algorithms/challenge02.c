@@ -3,31 +3,28 @@ int main()
 {
     int a[] = {1,3,4,5,6,7};
     int to_find ;
-    int cu, cu_0=0, cu_x=6;
+    int cu, start=0, finish=5;
     int found = 0;
     printf("enter your number : ");
     scanf("%d",&to_find);
-    while(1)
+    while(start <= finish)
     {
-        cu = (cu_0+cu_x)/2;
-        if (cu == cu_0 || cu == cu_x)
-        {
-            break;
-        }
+        cu = (start + finish)/2;
         
         if (a[cu] == to_find)
         {
             printf("found ! ");
             found  = 1 ;
+            break;
         }
         else if (a[cu] < to_find)
         {
-            cu_0 = cu;
+            start = cu + 1;
             continue;
         }
-        else if(a[cu] < to_find)
+        else if(a[cu] > to_find)
         {
-            cu_x = cu;
+            finish = cu - 1;
             continue;
         }
         

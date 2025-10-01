@@ -76,12 +76,12 @@ void afficher_animal(struct Animal a){
     printf("Popularite : %d\n", a.pop);
 }
 
-int rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
+int rechercher(int num_anim, char nom_ch[]){
     int trouve = 0;
     int index_de_nom;
 
     for (int i = 0; i < num_anim; i++){
-        if (stricmp(animal[i].nom, nom_ch) == 0)        
+        if (strcmp(animal[i].nom, nom_ch) == 0)
         {
             trouve = 1;
             index_de_nom = i;
@@ -89,27 +89,9 @@ int rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
         }
     }
     if (!trouve){
-        return -1;
+        printf("Desole, cet animal n'existent pas dans notre zoo.\n");
     }
     return index_de_nom;
-}
-int  rechercher_espece(int num_anim, char esp_ch[], int index_esp[200], int taille){    //recherche linéaire
-    for (int i = 0; i < num_anim; i++){
-        if (strcmp(animal[i].espece, esp_ch) == 0){
-            index_esp[taille] = i;
-            taille++;           //"taille" Permet de stocker les indexes des animeaux  trouvés l'un après l'autre
-            continue;
-        }
-    }
-    if (!taille){
-        return -1;
-    }else{
-        for(int j = 0; j <=taille; j++){
-            printf("\n-------------------------\n");
-            afficher_animal(animal[j]);
-            printf("\n-------------------------\n");
-        }
-    }
 }
 
 int main() {
@@ -153,7 +135,7 @@ int main() {
                 getchar();              //Eliminer \n
                 while (num_ajout > 0)
                 {
-                    char verf_str[40];    //nous permet de sauvegarder seulemet la saisie "correct" de l'utilisateur, et j'ai utilisé cette variable temporelle parce que les fonctions ne peuvent pas retourner des "strings" (NB: il est possible mais plus avancé)
+                    char verf_str[40];    //nous permet de 
                     //Ajouter nom
                     printf("Entrez le nom de l'animal que vous souhaitez ajouter: ");
                     fgets(verf_str, sizeof(verf_str), stdin);           
@@ -283,57 +265,31 @@ int main() {
                 switch (choix_2)
                 {
                     case 1:
-                        int temp;   //"temp" permet de resutiliser la valeur retourner par la fonction (dans la ligne '292') 
+                        int temp; 
                         printf("Vouillez entrez l'ID de l'animal que vous souhaitez chercher: ");
                         temp = verifier_et_remplire_digit();
                         if (temp >= num_anim){
-                            printf("\nDesole, cet animal n'existent pas dans notre zoo.\n");
+                            printf("Desole, cet animal n'existent pas dans notre zoo.\n");
                         }else{
                             afficher_animal(animal[temp]);
                         }
                         break;
                     case 2:
-                        char verf_str[40];      //nous permet de sauvegarder seulemet la saisie "correct" de l'utilisateur, et j'ai utilisé cette variable temporelle parce que les fonctions ne peuvent pas retourner des "strings" (NB: il est possible mais plus avancé)
+                        char verf_str[40];
                         printf("Vouiller entrez le nom de l'animal que vous shouhaitez chercher: ");
                         fgets(verf_str, 40, stdin);
                         verifier_et_remplire_str(verf_str); 
-                        eliminer_n_ligne(verf_str);
-                        if (rechercher_nom(num_anim, verf_str) == -1 ){
-                            printf("\nDesole, cet animal n'existent pas dans notre zoo.\n");
-                        }else{
-                            printf("\n-------------------------\n");
-                            afficher_animal(animal[rechercher_nom(num_anim, verf_str)]);
-                            printf("\n-------------------------\n");
-                        }
+
                         break;
                     case 3:
-                        int choix_3;
-                        int ind_esp[200];
-                    
-                        printf("Entrez l'Habitat des animeaux que vous souhaitez chercher: ");
-                        printf("\n1.Savane \n2.Jungle \n3.Aquatique \n4.Arctique \n5.Desert\n");
-                        choix_3 = (int)verifier_et_remplire_digit();
-
-                        switch (choix_3)
-                        {
-                            case 1:
-                                rechercher_espece(num_anim, "Savane", ind_esp, 0);
-                                break;
-                            case 2:
-                                rechercher_espece(num_anim, "Jungle", ind_esp, 0);
-                                break;
-                            case 3:
-                                rechercher_espece(num_anim, "Aquatique", ind_esp, 0);
-                                break;
-                            case 4:
-                                rechercher_espece(num_anim, "Arctique", ind_esp, 0);
-                                break;
-                            case 5:
-                                rechercher_espece(num_anim, "Desert", ind_esp, 0);
-                                break;
                         
-                    break;
+                        break;
+                    case 4:
+                        
+                        break;
                 }
+                break;
+            }
             case 6:
             {
                 break;
@@ -348,7 +304,5 @@ int main() {
             }
         }
     }
-    }
     return 0;
-}
 }

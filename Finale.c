@@ -1,22 +1,304 @@
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <ctype.h>
+
+struct Animal
+{
+    int ID;
+    char nom[40];
+    char espece[40];
+    int age;
+    char habitat[40];
+    float poids;
+    int pop;
+};
+
+struct Animal animal[200]= {{0, "Rex", "Lion", 5, "Savane", 190.85, 0},
+                            {1, "Nala", "Tigre" , 4, "Jungle", 220.20, 0},
+                            {2, "Tony", "Lio", 6, "Savane", 180.27, 0},
+                            {3, "Flocon", "Serpent", 3, "Jungle", 61.40, 0},
+                            {4, "Nemo", "Poisson Clown", 1, "Aquatique", 0.25, 0},
+                            {5, "Donkey", "singe", 2, "Jungle", 33.00, 0},
+                            {6, "Bob", "Ours Polaire", 8, "Arctique", 449.99, 0},
+                            {7, "Geoffrey", "Girafe", 7, "Savane",803.50, 0},
+                            {8, "Melman", "Girafe", 7, "Savane", 764.10, 0},
+                            {9, "Ping", "Pingouin", 2, "Aquatique",32.50, 0}
+                           };
+
+
+void eliminer_n_ligne(char x[]){
+    x[strcspn(x, "\n")] = 0;
+}
+
+void verifier_et_remplire_str(char y[40]){
+    int check = 0;
+    eliminer_n_ligne(y);
+    while (check == 0){
+        check = 1;
+        for (int i = 0; i < strlen(y); i++){
+            if (!isalpha(y[i]))
+            {
+                check = 0;
+                break;
+            }
+            
+        }
+        if (check == 0){
+            printf("Votre derniere saisie est incorrecte. Veuillez taper une chaine de caracteres: ");
+            fgets(y, 40, stdin);
+            eliminer_n_ligne(y);
+        }
+    }
+}
+
+float verifier_et_remplire_digit(){
+    int check = 0;
+    float z;
+
+    while (check == 0){
+        check = 1;
+        if (scanf("%f", &z) != 1 || z <= 0){
+            check = 0;
+            printf("Votre derniere saisie est incorrecte. Veuillez taper un nombre entier: ");   
+            while (getchar() != '\n');          //Pour vider le "Buffer"
+        }
+    }
+    return z;
+}
+
+void afficher_animal(struct Animal a){
+    printf("ID : %d\n", a.ID);
+    printf("Nom : %s\n", a.nom);
+    printf("Espece : %s\n", a.espece);
+    printf("Habitat : %s\n", a.habitat);
+    printf("Poids : %.2f\n", a.poids);
+    printf("Popularite : %d\n", a.pop);
+}
+
+int rechercher(int num_anim, char nom_ch[]){
+    int trouve = 0;
+    int index_de_nom;
+
+    for (int i = 0; i < num_anim; i++){
+        if (strcmp(animal[i].nom, nom_ch) == 0)
+        {
+            trouve = 1;
+            index_de_nom = i;
+            break;
+        }
+    }
+    if (!trouve){
+        printf("Desole, cet animal n'existent pas dans notre zoo.\n");
+    }
+    return index_de_nom;
+}
 
 int main() {
-    printf("======================================================\n");
-    printf("||              ZZZZZZ   OOOOO    OOOOO             ||\n");
-    printf("||                 Z    O     O  O     O            ||\n");
-    printf("||                Z     O     O  O     O            ||\n");
-    printf("||               Z      O     O  O     O            ||\n");
-    printf("||              ZZZZZZ   OOOOO    OOOOO             ||\n");
-    printf("||                                                  ||\n");
-    printf("||                                                  ||\n");
-    printf("||                  ZOO MANAGER APP                 ||\n");
-    printf("||                                                  ||\n");
-    printf("||                     1.[Add]                      ||\n");
-    printf("||                     2.[Show]                     ||\n");
-    printf("||                     3.[Modify]                   ||\n");
-    printf("||                     4.[Delete]                   ||\n");
-    printf("||                                                  ||\n");
-    printf("======================================================\n");
+    
+    int num_anim = 10;
+    int choix, choix_2;
+    int tri[200];
 
+    while (1){
+        printf("======================================================\n");
+        printf("||              ZZZZZZ   OOOOO    OOOOO             ||\n");
+        printf("||                 Z    O     O  O     O            ||\n");
+        printf("||                Z     O     O  O     O            ||\n");
+        printf("||               Z      O     O  O     O            ||\n");
+        printf("||              ZZZZZZ   OOOOO    OOOOO             ||\n");
+        printf("||                                                  ||\n");
+        printf("||                                                  ||\n");
+        printf("||                  ZOO MANAGER APP                 ||\n");
+        printf("||                                                  ||\n");
+        printf("||                     1.[Ajouter]                  ||\n");
+        printf("||                     2.[Afficher]                 ||\n");
+        printf("||                     3.[Modifier]                 ||\n");
+        printf("||                     4.[Supprimer]                ||\n");
+        printf("||                     5.[Rechercher]               ||\n");
+        printf("||                     6.[Statistiques]             ||\n");
+        printf("||                     7.[Quitter]                  ||\n");
+        printf("||                                                  ||\n");
+        printf("======================================================\n");
+        scanf("%d", &choix);
+        getchar();
+
+
+        switch (choix)
+        {
+            case 1:
+            {
+                int num_ajout;
+
+                printf("combien d'animaux souhaitez-vous ajouter? : ");
+                num_ajout = verifier_et_remplire_digit();
+                getchar();              //Eliminer \n
+                while (num_ajout > 0)
+                {
+                    char verf_str[40];
+                    //Ajouter nom
+                    printf("Entrez le nom de l'animal que vous souhaitez ajouter: ");
+                    fgets(verf_str, sizeof(verf_str), stdin);           
+                    verifier_et_remplire_str(verf_str);
+                    strcpy(animal[num_anim].nom, verf_str);
+                    eliminer_n_ligne(animal[num_anim].nom);  
+                    //Ajouter espece 
+                    printf("Entrez l'espece de l'animal que vous souhaitez ajouter: ");
+                    fgets(verf_str, sizeof(verf_str), stdin);           
+                    verifier_et_remplire_str(verf_str);  
+                    strcpy(animal[num_anim].espece, verf_str);     
+                    eliminer_n_ligne(animal[num_anim].espece);   
+                    //Ajouter age
+                    printf("Entrez l'age de l'animal que vous souhaitez ajouter: ");
+                    animal[num_anim].age = (int)verifier_et_remplire_digit();
+                    getchar();
+                    //Ajouter habitat
+                    printf("Entrez l'Habitat de l'animal que vous souhaitez ajouter: ");
+                    printf("\n1.Savane \n2.Jungle \n3.Aquatique \n4.Arctique \n5.Desert\n");
+                    
+                    //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-5
+                    while (1)
+                    {
+                        int choix_2 = (int)verifier_et_remplire_digit();
+                        getchar();
+                        if (choix_2< 1 || choix_2 > 5){
+                            printf("Votre dernier saisie est incorrect. Veuillez taper un nombre entier: ");
+                            continue;
+                        }
+                        break;
+                    }
+                    switch (choix_2)
+                    {
+                    case 1:
+                        strcpy(animal[num_anim].habitat, "Savane");
+                        break;
+                    case 2:
+                        strcpy(animal[num_anim].habitat, "Jungle");
+                        break;
+                    case 3:
+                        strcpy(animal[num_anim].habitat, "Aquatique");
+                        break;
+                    case 4:
+                        strcpy(animal[num_anim].habitat, "Arctique");
+                        break;
+                    case 5:
+                        strcpy(animal[num_anim].habitat, "Desert");
+                        break;
+                    }   
+                    //Ajouter poids
+                    printf("Entrez le poids de l'animal que vous souhaitez ajouter: ");
+                    animal[num_anim].poids = verifier_et_remplire_digit();  
+                    getchar();
+
+                    printf("%s a ete ajoute avec succes\n", animal[num_anim].nom);      
+                    num_anim++;
+                    num_ajout--;
+                }
+                break;
+            }
+            case 2:
+            {
+                printf("Vouillez choisissez l'un de ces choix: ");
+                printf("\n1.Afficher la liste complete");
+                printf("\n2.Trier par nom");
+                printf("\n3.Trier par age");
+                printf("\n4.Afficher uniquement les animaux d'un habitat specifique\n");
+                //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-4
+                while (1)
+                {
+                    choix_2 = (int)verifier_et_remplire_digit();
+                    getchar();
+                    if (choix_2< 1 || choix_2 > 4){
+                        printf("Votre derniere saisie est incorrect. Veuillez taper un nombre entier entre 1-4: ");
+                        continue;
+                    }
+                    break;
+                }
+                switch (choix_2)
+                {
+                    case 1:
+                        for (int i = 0; i < num_anim; i++)
+                        {
+                            printf("\n-------------------------\n");
+                            afficher_animal(animal[i]);
+                            printf("\n-------------------------\n");
+                        }
+                        
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        
+                        break;
+                    case 4:
+                        
+                        break;
+                }
+                break;
+            }
+            case 3:
+            {
+                break;
+            }
+            case 4:
+            {
+                break;
+            }
+            case 5:
+            {
+                printf("Vouillez choisissez l'un de ces choix: ");
+                printf("\n1.Rechercher par ID");
+                printf("\n2.Rechercher par nom");
+                printf("\n3.Rechercher par espece\n");
+                //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-4
+                while (1)
+                {
+                    choix_2 = (int)verifier_et_remplire_digit();
+                    getchar();
+                    if (choix_2< 1 || choix_2 > 3){
+                        printf("Votre derniere saisie est incorrect. Veuillez taper un nombre entier entre 1-4: ");
+                        continue;
+                    }
+                    break;
+                }
+                switch (choix_2)
+                {
+                    case 1:
+                        int temp; 
+                        printf("Vouillez entrer l'ID de l'animal que vous souhaitez chercher: ");
+                        temp = verifier_et_remplire_digit();
+                        if (temp >= num_anim){
+                            printf("Desole, cet animal n'existent pas dans notre zoo.\n");
+                        }else{
+                            afficher_animal(animal[temp]);
+                        }
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        
+                        break;
+                    case 4:
+                        
+                        break;
+                }
+                break;
+            }
+            case 6:
+            {
+                break;
+            }
+            case 7:
+            {
+                return 0;
+            }
+            default:
+            {
+                printf("L'option que vous avez choisis est incorrect, s'il vous plait, entrez une valeur entre 1-6\n");
+            }
+        }
+    }
     return 0;
 }

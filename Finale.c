@@ -16,7 +16,7 @@ struct Animal
 
 struct Animal animal[200]= {{0, "Rex", "Lion", 5, "Savane", 190.85, 0},
                             {1, "Nala", "Tigre" , 4, "Jungle", 220.20, 0},
-                            {2, "Tony", "Lio", 6, "Savane", 180.27, 0},
+                            {2, "Tony", "Lion", 6, "Savane", 180.27, 0},
                             {3, "Flocon", "Serpent", 3, "Jungle", 61.40, 0},
                             {4, "Nemo", "Poisson Clown", 1, "Aquatique", 0.25, 0},
                             {5, "Donkey", "singe", 2, "Jungle", 33.00, 0},
@@ -76,40 +76,38 @@ void afficher_animal(struct Animal a){
     printf("Popularite : %d\n", a.pop);
 }
 
-int rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
-    int trouve = 0;
-    int index_de_nom;
+void rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
+    int trouve;
 
     for (int i = 0; i < num_anim; i++){
         if (stricmp(animal[i].nom, nom_ch) == 0)        
         {
             trouve = 1;
-            index_de_nom = i;
+            printf("\n-------------------------\n");
+            afficher_animal(animal[i]);
+            printf("\n-------------------------\n");
             break;
         }
     }
     if (!trouve){
-        return -1;
+        printf("\nDesole, cet animal n'existent pas dans notre zoo.\n");
     }
-    return index_de_nom;
 }
-int  rechercher_espece(int num_anim, char esp_ch[], int index_esp[200], int taille){    //recherche linéaire
+void  rechercher_espece(int num_anim, char esp_ch[]){   //recherche linéaire
+    int trouve;
     for (int i = 0; i < num_anim; i++){
-        if (strcmp(animal[i].espece, esp_ch) == 0){
-            index_esp[taille] = i;
-            taille++;           //"taille" Permet de stocker les indexes des animeaux  trouvés l'un après l'autre
-            continue;
+        if (stricmp(animal[i].espece, esp_ch) == 0){
+            trouve = 1;
+            printf("\n-------------------------\n");
+            afficher_animal(animal[i]);
+            printf("\n-------------------------\n");       
         }
     }
-    if (!taille){
-        return -1;
-    }else{
-        for(int j = 0; j <=taille; j++){
-            printf("\n-------------------------\n");
-            afficher_animal(animal[j]);
-            printf("\n-------------------------\n");
-        }
+    if (!trouve)
+    {
+        printf("\nDesole, cet espece n'existent pas dans notre zoo.\n");
     }
+    
 }
 
 int main() {
@@ -283,13 +281,15 @@ int main() {
                 switch (choix_2)
                 {
                     case 1:
-                        int temp;   //"temp" permet de resutiliser la valeur retourner par la fonction (dans la ligne '292') 
+                        int temp;           //"temp" permet de resutiliser la valeur retourner par la fonction (dans la ligne '292') 
                         printf("Vouillez entrez l'ID de l'animal que vous souhaitez chercher: ");
                         temp = verifier_et_remplire_digit();
                         if (temp >= num_anim){
                             printf("\nDesole, cet animal n'existent pas dans notre zoo.\n");
                         }else{
+                            printf("\n-------------------------\n");
                             afficher_animal(animal[temp]);
+                            printf("\n-------------------------\n");
                         }
                         break;
                     case 2:
@@ -298,42 +298,20 @@ int main() {
                         fgets(verf_str, 40, stdin);
                         verifier_et_remplire_str(verf_str); 
                         eliminer_n_ligne(verf_str);
-                        if (rechercher_nom(num_anim, verf_str) == -1 ){
-                            printf("\nDesole, cet animal n'existent pas dans notre zoo.\n");
-                        }else{
-                            printf("\n-------------------------\n");
-                            afficher_animal(animal[rechercher_nom(num_anim, verf_str)]);
-                            printf("\n-------------------------\n");
-                        }
+                        rechercher_nom(num_anim, verf_str);
                         break;
                     case 3:
                         int choix_3;
-                        int ind_esp[200];
+                        verf_str;
                     
-                        printf("Entrez l'Habitat des animeaux que vous souhaitez chercher: ");
-                        printf("\n1.Savane \n2.Jungle \n3.Aquatique \n4.Arctique \n5.Desert\n");
-                        choix_3 = (int)verifier_et_remplire_digit();
-
-                        switch (choix_3)
-                        {
-                            case 1:
-                                rechercher_espece(num_anim, "Savane", ind_esp, 0);
-                                break;
-                            case 2:
-                                rechercher_espece(num_anim, "Jungle", ind_esp, 0);
-                                break;
-                            case 3:
-                                rechercher_espece(num_anim, "Aquatique", ind_esp, 0);
-                                break;
-                            case 4:
-                                rechercher_espece(num_anim, "Arctique", ind_esp, 0);
-                                break;
-                            case 5:
-                                rechercher_espece(num_anim, "Desert", ind_esp, 0);
-                                break;
-                        
-                    break;
-                }
+                        printf("Entrez l'espece des animeaux que vous souhaitez chercher: ");
+                        fgets(verf_str, 40, stdin);
+                        verifier_et_remplire_str(verf_str);
+                        eliminer_n_ligne(verf_str);
+                        rechercher_espece(num_anim, verf_str);
+                        break;
+                } 
+            }  
             case 6:
             {
                 break;
@@ -348,7 +326,4 @@ int main() {
             }
         }
     }
-    }
-    return 0;
-}
 }

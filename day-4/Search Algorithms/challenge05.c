@@ -6,7 +6,11 @@ int main()
     int found = 0;
     printf("enter your number : ");
     scanf("%d",&to_find);
-    
+    while(1)
+    {
+        
+        
+    }
     if(!found)
     {
         printf("not found");

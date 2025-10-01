@@ -14,16 +14,26 @@ struct Animal
     int pop;
 };
 
-struct Animal animal[200]= {{0, "Rex", "Lion", 5, "Savane", 190.85, 0},
-                            {1, "Nala", "Tigre" , 4, "Jungle", 220.20, 0},
-                            {2, "Tony", "Lion", 6, "Savane", 180.27, 0},
-                            {3, "Flocon", "Serpent", 3, "Jungle", 61.40, 0},
-                            {4, "Nemo", "Poisson Clown", 1, "Aquatique", 0.25, 0},
+struct Animal animal[200]= {{0, "Rex", "Lion", 5, "Savane", 190.85, 20},
+                            {1, "Nala", "Tigre" , 4, "Jungle", 220.20, 19},
+                            {2, "Tony", "Lion", 6, "Savane", 180.27, 15},
+                            {3, "Flocon", "Serpent", 3, "Jungle", 61.40, 1},
+                            {4, "Nemo", "Poisson Clown", 1, "Aquatique", 0.25, 8},
                             {5, "Donkey", "singe", 2, "Jungle", 33.00, 0},
                             {6, "Bob", "Ours Polaire", 8, "Arctique", 449.99, 0},
                             {7, "Geoffrey", "Girafe", 7, "Savane",803.50, 0},
-                            {8, "Melman", "Girafe", 7, "Savane", 764.10, 0},
-                            {9, "Ping", "Pingouin", 2, "Aquatique",32.50, 0}
+                            {8, "Melman", "Girafe", 7, "Savane", 764.10, 4},
+                            {9, "Ping", "Pingouin", 2, "Aquatique",32.50, 4},
+                            {10, "Nola", "Renard", 4, "Jungle", 15.30, 21},
+                            {11, "koko", "Gorille", 7, "Jungle", 150.70, 0},
+                            {12, "Speedy", "Tortue", 70, "Aquatique", 100.25, 0},
+                            {13, "Dumbo", "Elephant", 23, "Savane", 5400.10, 7},
+                            {14, "Sunny", "Lezard", 1, "Desert", 0.70, 0},
+                            {15, "Rocky", "Chameau", 13, "Desert", 557.30, 5},
+                            {16, "Bongo", "Zebre", 5, "Savane", 350.30, 0},
+                            {17, "Splash", "Dauphin", 9, "Aquatique", 15.30, 5},
+                            {18, "Blizzard", "Loop Arctique", 7, "Arctique", 75.00, 19},
+                            {19, "Sonic", "Herisson", 3, "Jungle", 35.30, 21},
                            };
 
 
@@ -31,8 +41,8 @@ void eliminer_n_ligne(char x[]){
     x[strcspn(x, "\n")] = 0;
 }
 
-void verifier_et_remplire_str(char y[40]){
-    int check = 0;
+void verifier_et_remplire_str(char y[]){         //Cette loop se répète jusqu'à l'utilisateur saisie un list de caractère (alphabet), et sauvgarde ce string dans une varaible nommée verf_str
+    int check = 0;              //
     eliminer_n_ligne(y);
     while (check == 0){
         check = 1;
@@ -42,7 +52,6 @@ void verifier_et_remplire_str(char y[40]){
                 check = 0;
                 break;
             }
-            
         }
         if (check == 0){
             printf("Votre derniere saisie est incorrecte. Veuillez taper une chaine de caracteres: ");
@@ -52,7 +61,7 @@ void verifier_et_remplire_str(char y[40]){
     }
 }
 
-float verifier_et_remplire_digit(){
+float verifier_et_remplire_digit(){             //Cette loop se répète jusqu'à l'utilisateur saisie un digit, et retourn ce nombre
     int check = 0;
     float z;
 
@@ -71,13 +80,14 @@ void afficher_animal(struct Animal a){
     printf("ID : %d\n", a.ID);
     printf("Nom : %s\n", a.nom);
     printf("Espece : %s\n", a.espece);
+    printf("Age : %d\n", a.age);
     printf("Habitat : %s\n", a.habitat);
     printf("Poids : %.2f\n", a.poids);
     printf("Popularite : %d\n", a.pop);
 }
 
 void rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
-    int trouve;
+    int trouve = 0;
 
     for (int i = 0; i < num_anim; i++){
         if (stricmp(animal[i].nom, nom_ch) == 0)        
@@ -86,6 +96,7 @@ void rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
             printf("\n-------------------------\n");
             afficher_animal(animal[i]);
             printf("\n-------------------------\n");
+            animal[i].pop++; 
             break;
         }
     }
@@ -94,25 +105,43 @@ void rechercher_nom(int num_anim, char nom_ch[]){          //recherche linéaire
     }
 }
 void  rechercher_espece(int num_anim, char esp_ch[]){   //recherche linéaire
-    int trouve;
+    int trouve = 0;
     for (int i = 0; i < num_anim; i++){
         if (stricmp(animal[i].espece, esp_ch) == 0){
             trouve = 1;
             printf("\n-------------------------\n");
             afficher_animal(animal[i]);
-            printf("\n-------------------------\n");       
+            printf("\n-------------------------\n");
+            animal[i].pop++;       
         }
     }
     if (!trouve)
     {
         printf("\nDesole, cet espece n'existent pas dans notre zoo.\n");
+    }   
+}
+int jeune(struct Animal animal[], int num){                        //Retourne l'index de l'animal le plu petit
+    int youngest_ind = 0;
+    for (int i = 0; i<num; i++){
+        if(animal[i].age < animal[youngest_ind].age){
+            youngest_ind = i;
+        }
     }
-    
+    return youngest_ind;
+}
+int vielle(struct Animal animal[], int num){                       //Retourne l'index de l'animal le plu grand
+    int oldest_ind = 0;
+    for (int i = 0; i<num; i++){
+        if(animal[i].age > animal[oldest_ind].age){
+            oldest_ind = i;
+        }
+    }
+    return oldest_ind;
 }
 
 int main() {
     
-    int num_anim = 10;
+    int num_anim = 20;
     int choix, choix_2;
     int tri[200];
 
@@ -127,13 +156,13 @@ int main() {
         printf("||                                                  ||\n");
         printf("||                  ZOO MANAGER APP                 ||\n");
         printf("||                                                  ||\n");
-        printf("||                     1.[Ajouter]                  ||\n");
-        printf("||                     2.[Afficher]                 ||\n");
-        printf("||                     3.[Modifier]                 ||\n");
-        printf("||                     4.[Supprimer]                ||\n");
-        printf("||                     5.[Rechercher]               ||\n");
-        printf("||                     6.[Statistiques]             ||\n");
-        printf("||                     7.[Quitter]                  ||\n");
+        printf("||                   1.[Ajouter]                    ||\n");
+        printf("||                   2.[Afficher]                   ||\n");
+        printf("||                   3.[Modifier]                   ||\n");
+        printf("||                   4.[Supprimer]                  ||\n");
+        printf("||                   5.[Rechercher]                 ||\n");
+        printf("||                   6.[Statistiques]               ||\n");
+        printf("||                   7.[Quitter]                    ||\n");
         printf("||                                                  ||\n");
         printf("======================================================\n");
         scanf("%d", &choix);
@@ -214,7 +243,7 @@ int main() {
             }
             case 2:
             {
-                printf("Vouillez choisissez l'un de ces choix: ");
+                printf("Vouillez choisir l'un de ces choix: ");
                 printf("\n1.Afficher la liste complete");
                 printf("\n2.Trier par nom");
                 printf("\n3.Trier par age");
@@ -263,17 +292,17 @@ int main() {
             }
             case 5:
             {
-                printf("Vouillez choisissez l'un de ces choix: ");
+                printf("Vouillez choisir l'un de ces choix: ");
                 printf("\n1.Rechercher par ID");
                 printf("\n2.Rechercher par nom");
                 printf("\n3.Rechercher par espece\n");
-                //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-4
+                //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-3
                 while (1)
                 {
                     choix_2 = (int)verifier_et_remplire_digit();
                     getchar();
                     if (choix_2< 1 || choix_2 > 3){
-                        printf("Votre derniere saisie est incorrect. Veuillez taper un nombre entier entre 1-4: ");
+                        printf("Votre derniere saisie est incorrect. Veuillez taper un nombre entier entre 1-3: ");
                         continue;
                     }
                     break;
@@ -282,7 +311,7 @@ int main() {
                 {
                     case 1:
                         int temp;           //"temp" permet de resutiliser la valeur retourner par la fonction (dans la ligne '292') 
-                        printf("Vouillez entrez l'ID de l'animal que vous souhaitez chercher: ");
+                        printf("Vouillez entrer l'ID de l'animal que vous souhaitez chercher: ");
                         temp = verifier_et_remplire_digit();
                         if (temp >= num_anim){
                             printf("\nDesole, cet animal n'existent pas dans notre zoo.\n");
@@ -290,11 +319,12 @@ int main() {
                             printf("\n-------------------------\n");
                             afficher_animal(animal[temp]);
                             printf("\n-------------------------\n");
+                            animal[temp].pop++;               //Augemente la popularitée 
                         }
                         break;
                     case 2:
                         char verf_str[40];      //nous permet de sauvegarder seulemet la saisie "correct" de l'utilisateur, et j'ai utilisé cette variable temporelle parce que les fonctions ne peuvent pas retourner des "strings" (NB: il est possible mais plus avancé)
-                        printf("Vouiller entrez le nom de l'animal que vous shouhaitez chercher: ");
+                        printf("Vouiller entrer le nom de l'animal que vous shouhaitez chercher: ");
                         fgets(verf_str, 40, stdin);
                         verifier_et_remplire_str(verf_str); 
                         eliminer_n_ligne(verf_str);
@@ -314,7 +344,56 @@ int main() {
             }  
             case 6:
             {
-                break;
+                int choix_2;
+                printf("Vouillez choisir l'un de ces choix: ");
+                printf("\n1.Afficher le nombre total d'animaux dans le zoo");
+                printf("\n2.Calculer et afficher l'age moyen des animaux");
+                printf("\n3.Afficher le plus vieux et le plus jeune animal");
+                printf("\n4.Afficher les especes les plus representees\n");
+                choix_2 = verifier_et_remplire_digit();
+                getchar();
+                switch (choix_2)
+                {
+                case 1:
+                    printf("\nLe nombre totale des animeaux dans notre Zoo est : %d\n", num_anim);
+                    break;                
+                case 2:
+                    float temp = 0;
+                    for (int  i = 0; i < num_anim; i++)
+                    {
+                        temp += animal[i].age;
+                    }                    
+                    temp /= num_anim;
+                    printf("%f", temp);
+                    break;
+                case 3:
+                    printf("La person la plus petite est: \n");
+                    printf("\n-------------------------\n");
+                    afficher_animal(animal[jeune(animal,20)]);
+                    printf("\n-------------------------\n");
+                    printf("La person la plus grande est: \n");
+                    printf("\n-------------------------\n");
+                    afficher_animal(animal[vielle(animal,20)]);
+                    printf("\n-------------------------\n");
+                    break;
+                case 4:
+                    int p_grand = animal[0].pop;
+                    for (int i = 0; i < num_anim; i++){                 //Cette boucle trouve la valeur la plus grande de popularité
+                        if (animal[i].pop > p_grand){
+                            p_grand = animal[i].pop;
+                        } 
+                    }
+                    printf("\nle plus grand %d\n", p_grand);
+
+                    printf("Les especes les plus présentées sont: \n"); 
+
+                    for (int j = 0; j < num_anim; j++){                 //Cette boucle mais en concideration que plusieurs espèce peut avoir la même popularité
+                        if (p_grand == animal[j].pop)
+                            printf("\n%s",animal[j].espece);
+                    }
+                    break;
+                }
+                
             }
             case 7:
             {

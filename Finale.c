@@ -110,7 +110,6 @@ int rechercher_nom_cache(int num_anim, char nom_ch[]){          //recherche lin√
     for (int i = 0; i < num_anim; i++){
         if (stricmp(animal[i].nom, nom_ch) == 0)        
         {
-            printf("%s", animal[i].nom);
             trouve = 1;
             animal[i].pop++; 
             return i;
@@ -301,8 +300,6 @@ int main() {
             }
             case 3:
             {
-                choix_2;
-
                 printf("Vouillez choisir l'un de ces choix: ");
                 printf("\n1.Modifier l'habitat d'un animal");
                 printf("\n2.Modifier l'age\n");
@@ -314,17 +311,49 @@ int main() {
                 case 1:
                     char verf_str[40];
                     int temp_index;         
-                    printf("\nVouillez entrez le nom de l'animal que vous shouhaitez changer l'habitat: ");
+                    printf("Vouillez entrez le nom de l'animal que vous shouhaitez changer l'habitat: ");
                     fgets(verf_str, sizeof(verf_str), stdin);
                     verifier_et_remplire_str(verf_str);
                     eliminer_n_ligne(verf_str);
-                    if (temp_index = rechercher_nom_cache(num_anim, verf_str) >= 0){
-                        printf("\nl'habitat actualle de %s est: %s\n", animal[temp_index].nom, animal[temp_index].habitat);
+                    temp_index = rechercher_nom_cache(num_anim, verf_str);
+                    printf("%d", temp_index);
+                    if (temp_index >= 0){
+                        printf("\nL'habitat actualle de %s est: %s\n", animal[temp_index].nom, animal[temp_index].habitat);
                         printf("Entrez le nouveau habitat: ");
-                        fgets(verf_str, sizeof(verf_str), stdin);
-                        verifier_et_remplire_str(verf_str);
-                        eliminer_n_ligne(verf_str);
+                        printf("Choisissez la nouvelle habitat: ");
+                        printf("\n1.Savane \n2.Jungle \n3.Aquatique \n4.Arctique \n5.Desert\n");
+                    
+                    //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-5
+                    while (1)
+                    {
+                        int choix_2 = (int)verifier_et_remplire_digit();
+                        getchar();
+                        if (choix_2< 1 || choix_2 > 5){
+                            printf("Votre dernier saisie est incorrect. Veuillez taper un nombre entier: ");
+                            continue;
+                        }
+                        break;
                     }
+                    switch (choix_2)
+                    {
+                    case 1:
+                        strcpy(animal[num_anim].habitat, "Savane");
+                        break;
+                    case 2:
+                        strcpy(animal[num_anim].habitat, "Jungle");
+                        break;
+                    case 3:
+                        strcpy(animal[num_anim].habitat, "Aquatique");
+                        break;
+                    case 4:
+                        strcpy(animal[num_anim].habitat, "Arctique");
+                        break;
+                    case 5:
+                        strcpy(animal[num_anim].habitat, "Desert");
+                        break;
+                    }   
+                    }
+                    
                     break;
                 
                 case 2:

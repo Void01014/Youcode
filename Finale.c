@@ -159,11 +159,29 @@ int vielle(struct Animal animal[], int num){                       //Retourne l'
     return oldest_ind;
 }
 
+#include <stdio.h>
+void tri_nom (struct Animal animal[], int tri_nom[]){
+        int hold = 0;
+        int index_h = 0;
+        for (int j = 0; j < 200; j++)
+        {
+            hold = animal[j].age;
+            index_h = j;
+            for (int i = j+1; i < 200; i++){
+                if (animal[i].age < hold) {
+                    index_h = i;
+                    hold = animal[i].age;
+                }
+            }
+            tri_nom[j] = animal[index_h].ID;
+        }
+}
 int main() {
     
     int num_anim = 20;
     int choix, choix_2, choix_3;
-    int tri[200];
+    int tri_nom[200];
+    int tri_age[200];
 
     while (1){
         printf("======================================================\n");

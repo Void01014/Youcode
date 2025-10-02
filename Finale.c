@@ -306,35 +306,35 @@ int main() {
             {
                 int temp_index;
                 char verf_str[40];
+                int n_age = 0;
 
                 printf("Vouillez entrez le nom de l'animal que vous shouhaitez modifier: ");
                 fgets(verf_str, sizeof(verf_str), stdin);
                 verifier_et_remplire_str(verf_str);
                 eliminer_n_ligne(verf_str);
                 temp_index = rechercher_nom_cache(num_anim, verf_str);
-                printf("Vouillez Choisir le type de modification: ");
-                printf("\n1.Modifier l'habitat");
-                printf("\n2.Modifier l'age\n");
-                //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-2
-                while (1)
-                {
-                    choix_2 = (int)verifier_et_remplire_digit();
-                    getchar();
-                    if (choix_2< 1 || choix_2 > 2){
-                        printf("Votre dernier saisie est incorrect. Veuillez taper un nombre entier entre 1-2: ");
-                        continue;
+                if (temp_index >= 0){
+                    printf("Vouillez Choisir le type de modification: ");
+                    printf("\n1.Modifier l'habitat");
+                    printf("\n2.Modifier l'age\n");
+                    //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-2
+                    while (1)
+                    {
+                        choix_2 = verifier_et_remplire_digit();
+                        getchar();
+                        if (choix_2< 1 || choix_2 > 2){
+                            printf("Votre dernier saisie est incorrect. Veuillez taper un nombre entier entre 1-2: ");
+                            continue;
+                        }
+                        break;
                     }
-                    break;
-                }
-                switch (choix_2)
-                {
-                    case 1:{       
-                        
-                        if (temp_index >= 0){
+                    switch (choix_2)
+                    {
+                        case 1:{       
                             printf("\nL'habitat actualle de %s est: %s\n", animal[temp_index].nom, animal[temp_index].habitat);
                             printf("Choisissez la nouvelle habitat: ");
                             printf("\n1.Savane \n2.Jungle \n3.Aquatique \n4.Arctique \n5.Desert\n");
-                        
+                            
                             //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-5
                             while (1)
                             {
@@ -350,32 +350,74 @@ int main() {
                             {
                             case 1:
                                 strcpy(animal[temp_index].habitat, "Savane");
+                                printf("modification a ete effectue avec succes, la nouvelle habitat de %s est 'Savane'\n", animal[temp_index].nom);
                                 break;
                             case 2:
                                 strcpy(animal[temp_index].habitat, "Jungle");
+                                printf("modification a ete effectue avec succes, la nouvelle habitat de %s est 'Jungle'\n", animal[temp_index].nom);
                                 break;
                             case 3:
                                 strcpy(animal[temp_index].habitat, "Aquatique");
+                                printf("modification a ete effectue avec succes, la nouvelle habitat de %s est 'Aquatique'\n", animal[temp_index].nom);
                                 break;
                             case 4:
                                 strcpy(animal[temp_index].habitat, "Arctique");
+                                printf("modification a ete effectue avec succes, la nouvelle habitat de %s est 'Arctique'\n", animal[temp_index].nom);
                                 break;
                             case 5:
                                 strcpy(animal[temp_index].habitat, "Desert");
+                                printf("modification a ete effectue avec succes, la nouvelle habitat de %s est 'Desert'\n", animal[temp_index].nom);
                                 break;
                             }   
+                            break;
                         }
-                        break;
-                    }
-                    case 2:{
-                        
-                        break;
+                        case 2:{
+                            printf("\nL'age actualle de %s est: %d\n", animal[temp_index].nom, animal[temp_index].age);
+                            printf("Entrez le nouveau age: \n");
+                            n_age = (int)verifier_et_remplire_digit();
+                            getchar();
+                            animal[temp_index].age = n_age;
+                            printf("modification a ete effectue avec succes, le nouveau age de %s est %d\n", animal[temp_index].nom, animal[temp_index].age);
+                            break;
+                        }
                     }
                 }
-                break;
+                break;   
             }
             case 4:
             {
+                int temp_index;
+                int error = 0;
+
+                printf("\nVouillez entrez l'ID de l'animal que vous shouhaitez supprimer: \n");
+                printf("Voici Les ID des animeaux:\n");
+                for (int j = 0; j < num_anim; j++){
+                    printf("\n%s : %d\n", animal[j].nom, animal[j].ID);
+                }
+                temp_index = verifier_et_remplire_digit();
+                getchar();
+                for (int i = temp_index; i < num_anim; i++){
+                    animal[i] = animal[i+1];
+                    
+                }
+
+                //Verifions si l'operation a ete effectué avec succès
+                for (int f = 0; f < num_anim - 1; f++)
+                {
+                    if (animal[f].ID == temp_index)
+                    {
+                        printf("Operation echouee");
+                        error = 1;
+                    }
+                    
+                }
+                if (error == 0)
+                {
+                    printf("\nmodification a ete effectue avec succes\n");
+                }
+                
+                
+                num_anim --;
                 break;
             }
             case 5:

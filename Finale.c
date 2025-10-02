@@ -159,29 +159,38 @@ int vielle(struct Animal animal[], int num){                       //Retourne l'
     return oldest_ind;
 }
 
-#include <stdio.h>
-void tri_nom (struct Animal animal[], int tri_nom[]){
-        int hold = 0;
-        int index_h = 0;
-        for (int j = 0; j < 200; j++)
-        {
-            hold = animal[j].age;
-            index_h = j;
-            for (int i = j+1; i < 200; i++){
-                if (animal[i].age < hold) {
-                    index_h = i;
-                    hold = animal[i].age;
+void tri_age(struct Animal animal[], int num) {
+    for (int i = 0; i < num; i++){
+        for (int j = 0; j < num - i - 1; j++){
+            if (animal[j].age > animal[j + 1].age){
+                struct Animal temp = animal[j + 1];
+                animal[j + 1] = animal[j];
+                animal[j] = temp; 
+            }
+            
+        }
+    }
+}
+
+void tri_nom (struct Animal animal[], int num){               //Tri de selection
+    for (int j = 0; j < num; j++)
+    {
+        for (int i = 0; i < num; i++){
+            for (int j = 0; j < num - i - 1; j++){
+                if (stricmp(animal[j].nom, animal[j + 1].nom) > 0 ){
+                    struct Animal temp = animal[j + 1];
+                    animal[j + 1] = animal[j];
+                    animal[j] = temp; 
                 }
             }
-            tri_nom[j] = animal[index_h].ID;
         }
+    }
 }
+
 int main() {
     
     int num_anim = 20;
     int choix, choix_2, choix_3;
-    int tri_nom[200];
-    int tri_age[200];
 
     while (1){
         printf("======================================================\n");
@@ -309,13 +318,86 @@ int main() {
                         
                         break;
                     case 2:
-                        
+                        tri_nom(animal, num_anim);
+                        for (int i = 0; i < num_anim; i++)
+                        {
+                            printf("\n-------------------------\n");
+                            afficher_animal(animal[i]);
+                            printf("\n-------------------------\n");
+                        }
                         break;
                     case 3:
-                        
+                        tri_age(animal, num_anim);
+                        for (int i = 0; i < num_anim; i++)
+                        {
+                            printf("\n-------------------------\n");
+                            afficher_animal(animal[i]);
+                            printf("\n-------------------------\n");
+                        }
                         break;
                     case 4:
+                        printf("Vouillez choisir l'habitat que vous voulez afficher :");
+                        printf("\n1.Savane \n2.Jungle \n3.Aquatique \n4.Arctique \n5.Desert\n");
                         
+                        //cette loop a pour but assurer que l'utilisateur saisira correctement une valeur entre 1-5
+                        while (1)
+                        {
+                            choix_3 = (int)verifier_et_remplire_digit();
+                            getchar();
+                            if (choix_3< 1 || choix_3 > 5){
+                                printf("Votre dernier saisie est incorrect. Veuillez taper un nombre entier entre 1-5: ");
+                                continue;
+                            }
+                            break;
+                        }
+                        switch (choix_3)
+                        {
+                        case 1:
+                            for (int i = 0; i < num_anim; i++){
+                                if (stricmp(animal[i].habitat, "Savane") == 0){
+                                    printf("\n-------------------------\n");
+                                    afficher_animal(animal[i]);
+                                    printf("\n-------------------------\n");
+                                }
+                            }
+                            break;
+                        case 2:
+                            for (int i = 0; i < num_anim; i++){
+                                if (stricmp(animal[i].habitat, "Jungle") == 0){
+                                    printf("\n-------------------------\n");
+                                    afficher_animal(animal[i]);
+                                    printf("\n-------------------------\n");
+                                }
+                            }
+                            break;
+                        case 3:
+                            for (int i = 0; i < num_anim; i++){
+                                if (stricmp(animal[i].habitat, "Aquatique") == 0){
+                                    printf("\n-------------------------\n");
+                                    afficher_animal(animal[i]);
+                                    printf("\n-------------------------\n");
+                                }
+                            }
+                            break;
+                        case 4:
+                            for (int i = 0; i < num_anim; i++){
+                                if (stricmp(animal[i].habitat, "Arctique") == 0){
+                                    printf("\n-------------------------\n");
+                                    afficher_animal(animal[i]);
+                                    printf("\n-------------------------\n");
+                                }
+                            }
+                            break;
+                        case 5:
+                            for (int i = 0; i < num_anim; i++){
+                                if (stricmp(animal[i].habitat, "Desert") == 0){
+                                    printf("\n-------------------------\n");
+                                    afficher_animal(animal[i]);
+                                    printf("\n-------------------------\n");
+                                }
+                            }
+                            break;
+                        }
                         break;
                 }
                 break;
@@ -432,9 +514,7 @@ int main() {
                 if (error == 0)
                 {
                     printf("\nmodification a ete effectue avec succes\n");
-                }
-                
-                
+                }                
                 num_anim --;
                 break;
             }
